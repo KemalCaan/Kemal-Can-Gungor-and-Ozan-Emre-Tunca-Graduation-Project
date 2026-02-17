@@ -49,19 +49,19 @@ Sistemin karar verme mekanizması adım adım aşağıdaki gibidir. Her kare (fr
 
 ```mermaid
 graph TD
-    A[📷 Kamera Görüntüsü Alınır] --> B{Yüz Tespit Edildi mi?}
+    A["📷 Kamera Görüntüsü Alınır"] --> B{"Yüz Tespit Edildi mi?"}
     
     B -- Hayır --> A
-    B -- Evet (MTCNN) --> C{🧟 Canlılık Kontrolü<br>(Spoof or Real?)}
+    B -- "Evet (MTCNN)" --> C{"🧟 Canlılık Kontrolü<br>(Spoof or Real?)"}
     
-    C -- SAHTE (Fotoğraf/Ekran) --> D[❌ ERİŞİM REDDEDİLDİ<br>(Kırmızı Uyarı)]
+    C -- "SAHTE (Fotoğraf/Ekran)" --> D["❌ ERİŞİM REDDEDİLDİ<br>(Kırmızı Uyarı)"]
     
-    C -- GERÇEK İNSAN --> E[👤 Kimlik Doğrulama<br>(FaceNet Embedding)]
+    C -- "GERÇEK İNSAN" --> E["👤 Kimlik Doğrulama<br>(FaceNet Embedding)"]
     
-    E --> F{Veritabanı Eşleşmesi<br>(Benzerlik > %90)}
+    E --> F{"Veritabanı Eşleşmesi<br>(Benzerlik > %90)"}
     
-    F -- Tanınmayan Kişi --> D
-    F -- Kayıtlı Kullanıcı --> G[✅ KAPI AÇILDI<br>(Röle Tetiklenir)]
+    F -- "Tanınmayan Kişi" --> D
+    F -- "Kayıtlı Kullanıcı" --> G["✅ KAPI AÇILDI<br>(Röle Tetiklenir)"]
     
-    G --> H[Log Kaydı Tutulur]
+    G --> H["Log Kaydı Tutulur"]
     D --> H
