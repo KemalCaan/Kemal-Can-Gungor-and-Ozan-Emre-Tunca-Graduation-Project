@@ -7,7 +7,7 @@
   <h3 align="center">Smart Door Lock System with Liveness Detection</h3>
 
   <p align="center">
-    Raspberry Pi 4 tabanlı, <b>Anti-Spoofing (Sahtecilik Koruması)</b> özellikli ve internet gerektirmeyen uçtan uca biyometrik güvenlik sistemi.
+    Raspberry Pi 4 tabanlı, <b>Deep Learning</b> destekli, sahteciliğe karşı korumalı (Anti-Spoofing) ve internet gerektirmeyen uçtan uca biyometrik güvenlik sistemi.
     <br />
     <br />
     <a href="https://linkedin.com/in/kemal-can-güngör-4598b4234/">Geliştirici ile İletişime Geç</a>
@@ -31,37 +31,37 @@
 
 ## 🚀 Proje Hakkında
 
-Bu proje, geleneksel anahtar sistemlerini ortadan kaldıran, **Edge Computing (Uç Bilişim)** mimarisiyle tasarlanmış akıllı bir güvenlik sistemidir. Sistem, internet bağlantısına ihtiyaç duymadan tüm yapay zeka işlemlerini Raspberry Pi üzerinde yerel olarak gerçekleştirir.
+Bu proje, fiziksel anahtarların yerini alan, **Edge Computing (Uç Bilişim)** mimarisine sahip bir akıllı kapı kilidi sistemidir. Sistem, internet bağlantısına ihtiyaç duymadan tüm görüntü işleme ve yapay zeka modellerini Raspberry Pi 4 üzerinde yerel olarak çalıştırır.
 
-Piyasadaki birçok yüz tanıma sisteminin aksine, bu proje sadece yüzü tanımakla kalmaz; **"Bu bir gerçek insan mı yoksa telefon ekranı/fotoğraf mı?"** sorusunu sorarak sahtecilik girişimlerini engeller.
+En büyük inovasyonu, entegre **Liveness Detection (Canlılık Testi)** modülüdür. Birçok yüz tanıma sisteminin aksine, bu proje kapıyı açmaya çalışan kişinin gerçek bir insan mı yoksa bir fotoğraf/video mu olduğunu ayırt edebilir.
 
 ### 🔥 Temel Özellikler
-* **🛡️ Anti-Spoofing (Canlılık Testi):** TFLite modeli sayesinde fotoğrafla veya videoyla yapılan kilit açma girişimlerini **%98 başarıyla** engeller.
-* **⚡ Yüksek Performans:** MTCNN ve FaceNet algoritmaları Raspberry Pi 4 için optimize edilmiştir; 1.4 saniye içinde karar verir.
-* **🔒 KVKK Uyumlu:** Biyometrik veriler asla buluta gönderilmez, cihaz içerisinde şifreli (pickle) olarak saklanır.
-* **🔌 Özel Güç Sürücüsü:** Raspberry Pi'yi yüksek voltajdan korumak için özel tasarlanmış MOSFET devresi kullanır.
+* **🛡️ Anti-Spoofing Teknolojisi:** TFLite tabanlı model ile sahte yüz saldırılarını (fotoğraf, video, maske) **%98 başarıyla** engeller.
+* **⚡ Yüksek Performans:** MTCNN ve FaceNet algoritmaları Raspberry Pi 4 için optimize edilmiştir; ortalama **0.7 FPS** hızında çalışır.
+* **🔒 Gizlilik Odaklı:** Biyometrik veriler (yüz vektörleri) asla buluta gönderilmez, cihaz içinde şifreli (pickle) saklanır.
+* **🔌 Özel Güç Sürücüsü:** 3.3V GPIO sinyallerini 12V kilit sistemine güvenle iletmek için **MOSFET** devresi tasarlanmıştır.
 
 ---
 
-## ⚙️ Sistem Nasıl Çalışır? (Çalışma Mantığı)
+## 🧠 Yazılım Mimarisi ve Algoritma Akışı
 
-Sistemin karar verme mekanizması adım adım aşağıdaki gibidir. Her kare (frame) bu güvenlik süzgecinden geçirilir:
+Sistem, kameradan alınan her kareyi 4 aşamalı bir "Pipeline" üzerinden geçirir. Aşağıdaki şema sistemin karar mekanizmasını göstermektedir:
 
 ```mermaid
 graph TD
-    A["📷 Kamera Görüntüsü Alınır"] --> B{"Yüz Tespit Edildi mi?"}
+    A["📷 Kamera Görüntüsü (Input)"] --> B{"Yüz Tespit Edildi mi?<br>(MTCNN)"}
     
     B -- Hayır --> A
-    B -- "Evet (MTCNN)" --> C{"🧟 Canlılık Kontrolü<br>(Spoof or Real?)"}
+    B -- Evet --> C{"🧟 Canlılık Testi<br>(TFLite Anti-Spoofing)"}
     
     C -- "SAHTE (Fotoğraf/Ekran)" --> D["❌ ERİŞİM REDDEDİLDİ<br>(Kırmızı Uyarı)"]
     
-    C -- "GERÇEK İNSAN" --> E["👤 Kimlik Doğrulama<br>(FaceNet Embedding)"]
+    C -- "GERÇEK İNSAN" --> E["🔢 Yüz Tanıma - Embedding<br>(InceptionResNetV1)"]
     
-    E --> F{"Veritabanı Eşleşmesi<br>(Benzerlik > %90)"}
+    E --> F{"Veritabanı Eşleşmesi<br>(Cosine Similarity > 0.9)"}
     
     F -- "Tanınmayan Kişi" --> D
-    F -- "Kayıtlı Kullanıcı" --> G["✅ KAPI AÇILDI<br>(Röle Tetiklenir)"]
+    F -- "Kayıtlı Kullanıcı" --> G["✅ KAPI AÇILDI<br>(GPIO Röle Tetikleme)"]
     
-    G --> H["Log Kaydı Tutulur"]
+    G --> H["Log Kaydı Tut"]
     D --> H
