@@ -36,16 +36,16 @@ Bu proje, fiziksel anahtarların yerini alan, **Edge Computing (Uç Bilişim)** 
 En büyük inovasyonu, entegre **Liveness Detection (Canlılık Testi)** modülüdür. Birçok yüz tanıma sisteminin aksine, bu proje kapıyı açmaya çalışan kişinin gerçek bir insan mı yoksa bir fotoğraf/video mu olduğunu ayırt edebilir.
 
 ### 🔥 Temel Özellikler
-* [cite_start]**🛡️ Anti-Spoofing Teknolojisi:** TFLite tabanlı model ile sahte yüz saldırılarını (fotoğraf, video, maske) **%98 başarıyla** engeller [cite: 937-938].
-* [cite_start]**⚡ Yüksek Performans:** MTCNN ve FaceNet algoritmaları Raspberry Pi 4 için optimize edilmiştir; ortalama **0.7 FPS** hızında çalışır[cite: 719, 793].
-* [cite_start]**🔒 Gizlilik Odaklı:** Biyometrik veriler (yüz vektörleri) asla buluta gönderilmez, cihaz içinde şifreli (pickle) saklanır [cite: 227-230].
-* [cite_start]**🔌 Özel Güç Sürücüsü:** 3.3V GPIO sinyallerini 12V kilit sistemine güvenle iletmek için **MOSFET** devresi tasarlanmıştır [cite: 462-465].
+* **🛡️ Anti-Spoofing Teknolojisi:** TFLite tabanlı model ile sahte yüz saldırılarını (fotoğraf, video, maske) **%98 başarıyla** engeller.
+* **⚡ Yüksek Performans:** MTCNN ve FaceNet algoritmaları Raspberry Pi 4 için optimize edilmiştir; ortalama **0.7 FPS** hızında çalışır.
+* **🔒 Gizlilik Odaklı:** Biyometrik veriler (yüz vektörleri) asla buluta gönderilmez, cihaz içinde şifreli (pickle) saklanır.
+* **🔌 Özel Güç Sürücüsü:** 3.3V GPIO sinyallerini 12V kilit sistemine güvenle iletmek için **MOSFET** devresi tasarlanmıştır.
 
 ---
 
-## 🧠 Yazılım Mimarisi ve Kullanılan Modeller
+## 🧠 Algoritma ve Yüz Tarama Akışı (Software Architecture)
 
-Sistem, kameradan alınan her kareyi 4 aşamalı bir "Pipeline" üzerinden geçirir. Aşağıdaki şema sistemin karar mekanizmasını göstermektedir:
+Sistemin "Görüntü Alma -> İşleme -> Karar Verme" döngüsü aşağıdaki akış şemasında gösterilmiştir:
 
 ```mermaid
 graph TD
