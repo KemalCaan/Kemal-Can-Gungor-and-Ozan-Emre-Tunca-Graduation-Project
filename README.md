@@ -1,4 +1,4 @@
-<br />
+[<br />
 <div align="center">
   <a href="https://github.com/KemalCaan/Kemal-Can-Gungor-and-Ozan-Emre-Tunca-Graduation-Project">
     <img src="https://cdn-icons-png.flaticon.com/512/814/814256.png" alt="Logo" width="100" height="100">
@@ -117,3 +117,4 @@ Projeyi kendi cihazınızda çalıştırmak için adımları takip edin:
 <div align="center">
   <sub>© 2025 Kemal Can Güngör - İstanbul Kültür Üniversitesi Bitirme Projesi</sub>
 </div>
+](https://www.linkedin.com/in/kemal-can-g%C3%BCng%C3%B6r-4598b4234/)
