@@ -3,11 +3,11 @@
 
 ![Python](https://img.shields.io/badge/Python-3.x-blue.svg) ![Platform](https://img.shields.io/badge/Platform-Raspberry%20Pi%204-red) ![Library](https://img.shields.io/badge/Library-PyTorch%20%7C%20OpenCV%20%7C%20TensorFlowLite-orange) ![License](https://img.shields.io/badge/license-MIT-green)
 
-## 📄 Proje Özeti (Abstract)
+## 📄 Proje Hakkında (About the Project)
 
-Bu proje, **İstanbul Kültür Üniversitesi** Bilgisayar Mühendisliği bitirme projesi kapsamında geliştirilmiştir. [cite_start]Proje, **Raspberry Pi 4** üzerinde çalışan, derin öğrenme tabanlı ve temas gerektirmeyen bir biyometrik güvenlik sistemidir[cite: 26, 34].
+Bu proje, **Elektrik-Elektronik Mühendisliği** bitirme tezi kapsamında **Kemal Can Güngör** tarafından geliştirilmiştir.
 
-[cite_start]Sistem, geleneksel yöntemlerin aksine sadece yüzü tanımakla kalmaz, aynı zamanda **TensorFlow Lite** tabanlı "Canlılık Tespiti" (Liveness Detection) modülü sayesinde fotoğraf veya video ile yapılan sahtecilik (spoofing) saldırılarını engeller[cite: 31, 39]. [cite_start]Veriler yerel olarak işlenir, herhangi bir bulut servisine ihtiyaç duymaz, bu da veri gizliliğini (KVKK/GDPR uyumlu) garanti altına alır[cite: 167].
+Proje, **Raspberry Pi 4** üzerinde çalışan, derin öğrenme tabanlı ve temas gerektirmeyen biometrik bir güvenlik sistemidir. Sistem, geleneksel yüz tanıma yöntemlerinin ötesine geçerek, **TensorFlow Lite** tabanlı "Canlılık Tespiti" (Liveness Detection) modülü sayesinde fotoğraf veya video ile yapılan sahtecilik (spoofing) saldırılarını engeller. Tüm veriler yerel olarak işlenir, herhangi bir bulut servisine ihtiyaç duyulmaz; bu da veri gizliliğini ve güvenliğini en üst düzeye çıkarır.
 
 ---
 
@@ -15,50 +15,58 @@ Bu proje, **İstanbul Kültür Üniversitesi** Bilgisayar Mühendisliği bitirme
 
 * [cite_start]**Yüksek Doğruluk:** MTCNN ve InceptionResNetV1 mimarileri kullanılarak **%96.5** doğruluk oranı elde edilmiştir[cite: 733].
 * [cite_start]**Anti-Spoofing (Canlılık Testi):** Fotoğraf ve video ekranı gösterilerek yapılan sızma girişimlerini **%96** başarı oranıyla engeller[cite: 853].
-* [cite_start]**Gömülü Sistem Mimarisi:** Harici bir GPU veya sunucuya ihtiyaç duymadan, tüm işlemler Raspberry Pi 4 CPU'su üzerinde gerçekleştirilir[cite: 848].
-* [cite_start]**Otomatik Aydınlatma Dengeleme:** Düşük ışık koşullarında (100-200 lux) histogram eşitleme ile performans kaybını önler[cite: 432, 658].
-* [cite_start]**Donanım Tabanlı Kilit Kontrolü:** Tanınan kullanıcı için GPIO pinleri üzerinden Solenoid kilidi tetikler[cite: 441].
+* [cite_start]**Gömülü Sistem Mimarisi:** Harici bir GPU veya sunucuya ihtiyaç duymadan, tüm işlemler Raspberry Pi 4 işlemcisi üzerinde gerçekleştirilir[cite: 848].
+* [cite_start]**Otomatik Aydınlatma Dengeleme:** Düşük ışık koşullarında (100-200 lux) histogram eşitleme ile performans kaybını önler[cite: 457].
+* [cite_start]**Donanım Tabanlı Kilit Kontrolü:** Tanınan kullanıcı için GPIO pinleri ve MOSFET sürücü devresi üzerinden Solenoid kilidi tetikler[cite: 405].
 
 ---
 
-## 🛠️ Kullanılan Teknolojiler ve Mimari
+## 🛠️ Sistem Mimarisi ve Kullanılan Teknolojiler
 
-### Yazılım ve Yapay Zeka Modelleri
-* [cite_start]**Yüz Tespiti ve Hizalama:** MTCNN (Multi-task Cascaded Convolutional Networks)[cite: 27].
-* [cite_start]**Öznitelik Çıkarımı (Embedding):** InceptionResNetV1 (VGGFace2 üzerinde eğitilmiş) - 512 boyutlu vektör çıktısı verir[cite: 29, 438].
-* [cite_start]**Canlılık Analizi (Liveness):** TensorFlow Lite (MobileNetV2 tabanlı hafif model)[cite: 439].
-* [cite_start]**Karşılaştırma:** Cosine Similarity (Kosinüs Benzerliği) algoritması[cite: 440].
-* [cite_start]**Arayüz (GUI):** Python Tkinter (Thread yapısı ile donma yapmayan arayüz)[cite: 433].
+Bu proje, donanım ve yazılım bileşenlerinin entegre çalıştığı bir gömülü sistem projesidir.
 
-### Donanım Bileşenleri
+### 1. Donanım Bileşenleri (Hardware)
+Proje aşağıdaki temel bileşenler üzerine kurulmuştur:
 * [cite_start]**Ana İşlemci:** Raspberry Pi 4 Model B (4GB RAM)[cite: 215].
-* [cite_start]**Görüntüleme:** Raspberry Pi Camera Module V3 (Sony IMX219 Sensör)[cite: 232].
+* [cite_start]**Görüntüleme:** Raspberry Pi Camera Module V3 (Sony IMX219 Sensör)[cite: 233].
 * [cite_start]**Kilit Mekanizması:** 12V Solenoid Kapı Kilidi[cite: 241].
-* [cite_start]**Sürücü Devre:** 5V Röle Modülü ve 3.3V mantık seviyesini güvenli şekilde tetiklemek için tasarlanmış **BS170 MOSFET** devresi[cite: 405, 422].
+* [cite_start]**Sürücü Devre:** 3.3V mantık seviyesini 5V röleye güvenli şekilde iletmek için tasarlanmış **BS170 MOSFET** tabanlı anahtarlama devresi[cite: 405, 422].
+
+*(Aşağıdaki alana projedeki donanım bağlantı şemasını -Figure 2- ekleyebilirsiniz)*
+![Donanım Bağlantı Şeması](images/hardware_design.png)
+*Şekil 1: Raspberry Pi, Röle ve Kilit Bağlantı Şeması*
+
+### 2. Yazılım ve Yapay Zeka Modelleri (Software & AI)
+* [cite_start]**Yüz Tespiti ve Hizalama:** MTCNN (Multi-task Cascaded Convolutional Networks)[cite: 314].
+* [cite_start]**Öznitelik Çıkarımı (Embedding):** InceptionResNetV1 (VGGFace2 üzerinde eğitilmiş) - 512 boyutlu vektör çıktısı verir[cite: 275].
+* [cite_start]**Canlılık Analizi (Liveness):** TensorFlow Lite (MobileNetV2 tabanlı hafif model)[cite: 463].
+* [cite_start]**Karşılaştırma:** Cosine Similarity (Kosinüs Benzerliği) algoritması[cite: 348].
 
 ---
 
-## 🔄 Sistem Çalışma Akışı (Workflow)
+## 🔄 Çalışma Akışı (Workflow)
 
-[cite_start]Sistem gerçek zamanlı (Real-Time) olarak aşağıdaki döngüyü işletir[cite: 368, 477]:
+Sistem gerçek zamanlı (Real-Time) olarak aşağıdaki döngüyü işletir:
 
 1.  **Görüntü Alma:** Pi Kamera V3'ten ham görüntü alınır.
-2.  **Ön İşleme:** Görüntü gri tonlamaya çevrilir ve Histogram Eşitleme uygulanır.
-3.  **Yüz Tespiti:** MTCNN ile yüz bulunur ve 5 ana nokta (gözler, burun, dudak) işaretlenir.
+2.  [cite_start]**Ön İşleme:** Görüntü gri tonlamaya çevrilir ve Histogram Eşitleme uygulanır[cite: 457].
+3.  [cite_start]**Yüz Tespiti:** MTCNN ile yüz bulunur ve 5 ana nokta (gözler, burun, dudak) işaretlenir[cite: 460].
 4.  **Canlılık Kontrolü:** Kırpılan yüz TFLite modeline gönderilir.
-    * *Sonuç "Fake" ise:* Erişim Reddedilir (Kilit açılmaz).
-    * *Sonuç "Real" ise:* Bir sonraki adıma geçilir.
-5.  **Vektör Çıkarımı:** InceptionResNetV1 yüzü 512 boyutlu sayısal bir vektöre dönüştürür.
+    * *Sonuç "Sahte" (Fake) ise:* Erişim Reddedilir (Kilit açılmaz).
+    * [cite_start]*Sonuç "Gerçek" (Real) ise:* Bir sonraki adıma geçilir[cite: 464].
+5.  [cite_start]**Vektör Çıkarımı:** InceptionResNetV1 yüzü 512 boyutlu sayısal bir vektöre dönüştürür[cite: 466].
 6.  [cite_start]**Eşleştirme:** Veritabanındaki kayıtlı yüzlerle Kosinüs Benzerliği hesaplanır (Eşik Değeri > 0.90)[cite: 469].
-7.  **Eylem:** Eşleşme varsa GPIO tetiklenir, röle çeker ve kapı açılır.
+7.  [cite_start]**Eylem:** Eşleşme varsa GPIO tetiklenir, röle çeker ve kapı açılır[cite: 471].
 
-*(Buraya projenizdeki Workflow Diagram görselini ekleyebilirsiniz - Figure 8)*
+*(Aşağıdaki alana projedeki akış diyagramını -Figure 8- ekleyebilirsiniz)*
+![Sistem Akış Diyagramı](images/workflow_diagram.png)
+*Şekil 2: Yazılım Algoritma Akış Şeması*
 
 ---
 
-## 📊 Performans ve Test Sonuçları
+## 📊 Performans Sonuçları
 
-[cite_start]Proje, Haar Cascade ve VGG16 gibi geleneksel yöntemlerle kıyaslanmış ve 1.050 adet test senaryosu ile doğrulanmıştır[cite: 637, 728].
+Proje, 1.050 adet test senaryosu ile doğrulanmış ve geleneksel yöntemlerle (Haar Cascade, VGG16) kıyaslanmıştır.
 
 | Yöntem | Doğruluk (Accuracy) | Ortalama Hız (FPS) | Donanım |
 | :--- | :---: | :---: | :---: |
@@ -66,7 +74,7 @@ Bu proje, **İstanbul Kültür Üniversitesi** Bilgisayar Mühendisliği bitirme
 | VGG16 + SSD300 | %92.0 | ~1.0 FPS | Raspberry Pi 4 |
 | Haar Cascade + HOG | %88.0 | ~3.5 FPS | Raspberry Pi 4 |
 
-* [cite_start]**Zorlu Koşullar:** Düşük ışıkta (<200 lux) ve 30 dereceye kadar açısal bozulmalarda dahi %90 üzeri başarı korunmuştur[cite: 658, 808].
+* [cite_start]**Zorlu Koşullar:** Düşük ışıkta (<200 lux) ve 30 dereceye kadar açısal bozulmalarda dahi %90 üzeri başarı korunmuştur[cite: 808, 868].
 * [cite_start]**Kaynak Tüketimi:** Çalışma esnasında CPU kullanımı ~%35, RAM kullanımı ~420MB seviyesindedir[cite: 872].
 
 ---
@@ -93,18 +101,17 @@ Projeyi yerel ortamınızda veya Raspberry Pi üzerinde çalıştırmak için:
     ```
 
 4.  **Kullanım:**
-    * [cite_start]Arayüz üzerinden "Yeni Kişi Ekle" butonuna basarak 5-10 adet fotoğraf ile profil oluşturun[cite: 540].
-    * [cite_start]Sistem otomatik olarak yüz profili vektörünü (`embeddings.pkl`) oluşturacaktır[cite: 566].
+    * Arayüz üzerinden "Yeni Kişi Ekle" butonuna basarak 5-10 adet fotoğraf ile profil oluşturun.
+    * Sistem otomatik olarak yüz profili vektörünü (`embeddings.pkl`) oluşturacaktır.
     * Ana ekrana dönüldüğünde sistem otomatik olarak tanıma moduna geçer.
 
 ---
 
-## 👥 Proje Ekibi
+## 👤 Geliştirici
 
-* **Kemal Can Güngör** - [LinkedIn](https://www.linkedin.com/in/kemal-can-g%C3%BCng%C3%B6r-4598b4234/)
-* **Ozan Emre Tunca** - [LinkedIn](https://www.linkedin.com/in/ozan-tunca-761b9a257/)
-
-**Danışman:** Öğr. Gör. [cite_start]Basri Erdoğan [cite: 18]
+* **Kemal Can Güngör** - Elektrik-Elektronik Mühendisi
+* [LinkedIn Profilim](https://www.linkedin.com/in/kemal-can-g%C3%BCng%C3%B6r-4598b4234/)
+* [E-posta](mailto:kemalcangungor@hotmail.com)
 
 ---
 
