@@ -81,20 +81,20 @@ graph TD
     %% Başlangıç Düğümü
     Start([Kamera Görüntüsü]) --> PreProc["Ön İşleme: Gri Tonlama & Histogram Eşitleme"]
 
-    %% Aşama 1: Tespit ve İşlem Adımları (Gri/Mavi Tonlar)
+    %% Aşama 1: Tespit ve İşlem Adımları
     PreProc --> Detect{"YÜZ TESPİTİ<br>(MTCNN)"}
     Detect -- Yüz Yok --> Start
     Detect -- Yüz Var --> Crop[Yüz Hizalama ve Kırpma]
 
-    %% Aşama 2: Güvenlik Kararı (Sarı/Altın Tonlar)
+    %% Aşama 2: Güvenlik Kararı
     Crop --> Liveness{"CANLILIK TESTİ<br>(TFLite)"}
     Liveness -- SAHTE (Fake) --> Deny["ERİŞİM REDDİ<br>(Alarm Durumu)"]
     
-    %% Aşama 3: Tanıma ve Eşleştirme (Gri/Mavi Tonlar)
+    %% Aşama 3: Tanıma ve Eşleştirme
     Liveness -- GERÇEK (Real) --> Embed["Vektör Çıkarımı<br>(InceptionResNetV1)"]
     Embed --> Match["Veritabanı Karşılaştırma<br>(Cosine Similarity)"]
     
-    %% Aşama 4: Nihai Karar (Sarı/Altın Tonlar)
+    %% Aşama 4: Nihai Karar
     Match --> Decision{"Benzerlik > 0.90?"}
     Decision -- Hayır --> Deny
     Decision -- Evet --> Unlock["MOSFET Tetikleme<br>(KAPI AÇIK)"]
@@ -103,20 +103,12 @@ graph TD
     Deny --> Start
     Unlock --> Start
 
-    %% --- Profesyonel Renk Tanımlamaları ---
-    % İşlem Adımları (Process): Soft Slate Blue / Profesyonel Gri-Mavi
+    %% Renk Tanımlamaları
     classDef process fill:#ECEFF1,stroke:#546E7A,stroke-width:1px,color:#263238;
-    
-    % Karar Noktaları (Decision): Soft Cream/Gold / Dikkat çekici ama yumuşak sarı
     classDef decision fill:#FFF8E1,stroke:#FFC107,stroke-width:1px,color:#263238;
-    
-    % Başarılı Sonuç (Result/Unlock): Calming Mint Green / Güven veren nane yeşili
     classDef result fill:#E8F5E9,stroke:#43A047,stroke-width:2px,color:#1B5E20;
-    
-    % Başarısız Sonuç (Fail/Deny): Muted Coral Red / Alarm veren ama bağırmayan kırmızı
     classDef fail fill:#FFEBEE,stroke:#E53935,stroke-width:2px,color:#B71C1C;
 
-    % Sınıfların Atanması
     class PreProc,Crop,Embed,Match process;
     class Detect,Liveness,Decision decision;
     class Unlock result;
