@@ -45,10 +45,85 @@ Proje, görüntü işleme yazılımı ile elektromekanik kontrol donanımının 
 #### Donanım Bağlantı Şeması (Wiring Diagram)
 Aşağıdaki şema, sistemin elektriksel bağlantı yapısını göstermektedir:
 
-```mermaid
+
 graph LR
     RPI[Raspberry Pi 4 GPIO] -- 3.3V Sinyal --> MOSFET[BS170 MOSFET Sürücü]
     MOSFET -- 5V Tetikleme --> RELAY[5V Röle Modülü]
     PSU[12V Güç Kaynağı] -- Güç Beslemesi --> RELAY
     RELAY -- Anahtarlama --> LOCK[Solenoid Kilit]
     CAM[Pi Camera V3] -- CSI Arayüzü --> RPI
+
+
+2. Yazılım Teknolojileri (Software Stack)
+Dil: Python 3.x
+
+Çerçeveler: PyTorch (FaceNet), TensorFlow Lite (Anti-Spoofing)
+
+Görüntü İşleme: OpenCV (cv2)
+
+Arayüz: Tkinter (Multithreaded GUI)
+
+
+
+
+graph TD
+    %% Başlangıç
+    Start([Kamera Görüntüsü Alımı]) --> PreProc[Ön İşleme: Gri Tonlama & Histogram Eşitleme]
+    %% Aşama 1: Tespit
+    PreProc --> Detect{YÜZ TESPİTİ\n(MTCNN)}
+    Detect -- Yüz Yok --> Start
+    Detect -- Yüz Var --> Crop[Yüzü Kırp ve Hizala]
+    %% Aşama 2: Güvenlik Kontrolü (Canlılık)
+    Crop --> Liveness{CANLILIK TESTİ\n(TFLite Model)}
+    Liveness -- SAHTE (Spoof) --> Deny[ERİŞİM REDDİ\n(Kırmızı LED Uyarısı)]    
+    %% Aşama 3: Tanıma
+    Liveness -- GERÇEK (Real) --> Embed[Vektör Çıkarımı\n(InceptionResNetV1)]
+    Embed --> Match[Veritabanı Karşılaştırma\n(Cosine Similarity)]
+    %% Aşama 4: Karar ve Eylem
+    Match --> Decision{Benzerlik > 0.90?}
+    Decision -- Hayır (Tanınmadı) --> Deny
+    Decision -- Evet (Tanındı) --> Actuate[GPIO & MOSFET Tetikleme]
+    Actuate --> Unlock(((KİLİT AÇILDI)))    
+    %% Döngü
+    Deny --> Start
+    Unlock -- 5 Sn Sonra Kitle --> Start
+    %% Stil Tanımlamaları
+    classDef process fill:#e1f5fe,stroke:#01579b,stroke-width:1px;
+    classDef decision fill:#fff9c4,stroke:#fbc02d,stroke-width:1px;
+    classDef resultDone fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px;
+    classDef resultFail fill:#ffcdd2,stroke:#c62828,stroke-width:2px;
+    class PreProc,Crop,Embed,Match,Actuate process;
+    class Detect,Liveness,Decision decision;
+    class Unlock resultDone;
+    class Deny resultFail;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
