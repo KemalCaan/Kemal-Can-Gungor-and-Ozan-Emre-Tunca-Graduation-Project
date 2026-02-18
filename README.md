@@ -78,37 +78,45 @@ Sistem, kameradan alınan her kareyi (frame) analiz ederek milisaniyeler içinde
 
 ```mermaid
 graph TD
-    %% Başlangıç
+    %% Başlangıç Düğümü
     Start([Kamera Görüntüsü]) --> PreProc["Ön İşleme: Gri Tonlama & Histogram Eşitleme"]
 
-    %% Aşama 1: Tespit
+    %% Aşama 1: Tespit ve İşlem Adımları (Gri/Mavi Tonlar)
     PreProc --> Detect{"YÜZ TESPİTİ<br>(MTCNN)"}
     Detect -- Yüz Yok --> Start
     Detect -- Yüz Var --> Crop[Yüz Hizalama ve Kırpma]
 
-    %% Aşama 2: Güvenlik (Spoofing)
+    %% Aşama 2: Güvenlik Kararı (Sarı/Altın Tonlar)
     Crop --> Liveness{"CANLILIK TESTİ<br>(TFLite)"}
     Liveness -- SAHTE (Fake) --> Deny["ERİŞİM REDDİ<br>(Alarm Durumu)"]
     
-    %% Aşama 3: Tanıma (Recognition)
+    %% Aşama 3: Tanıma ve Eşleştirme (Gri/Mavi Tonlar)
     Liveness -- GERÇEK (Real) --> Embed["Vektör Çıkarımı<br>(InceptionResNetV1)"]
     Embed --> Match["Veritabanı Karşılaştırma<br>(Cosine Similarity)"]
     
-    %% Aşama 4: Karar
+    %% Aşama 4: Nihai Karar (Sarı/Altın Tonlar)
     Match --> Decision{"Benzerlik > 0.90?"}
     Decision -- Hayır --> Deny
     Decision -- Evet --> Unlock["MOSFET Tetikleme<br>(KAPI AÇIK)"]
     
-    %% Döngü
+    %% Döngü ve Sonuçlar
     Deny --> Start
     Unlock --> Start
 
-    %% Stil
-    classDef process fill:#e1f5fe,stroke:#01579b,stroke-width:1px;
-    classDef decision fill:#fff9c4,stroke:#fbc02d,stroke-width:1px;
-    classDef result fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px;
-    classDef fail fill:#ffcdd2,stroke:#c62828,stroke-width:2px;
+    %% --- Profesyonel Renk Tanımlamaları ---
+    % İşlem Adımları (Process): Soft Slate Blue / Profesyonel Gri-Mavi
+    classDef process fill:#ECEFF1,stroke:#546E7A,stroke-width:1px,color:#263238;
+    
+    % Karar Noktaları (Decision): Soft Cream/Gold / Dikkat çekici ama yumuşak sarı
+    classDef decision fill:#FFF8E1,stroke:#FFC107,stroke-width:1px,color:#263238;
+    
+    % Başarılı Sonuç (Result/Unlock): Calming Mint Green / Güven veren nane yeşili
+    classDef result fill:#E8F5E9,stroke:#43A047,stroke-width:2px,color:#1B5E20;
+    
+    % Başarısız Sonuç (Fail/Deny): Muted Coral Red / Alarm veren ama bağırmayan kırmızı
+    classDef fail fill:#FFEBEE,stroke:#E53935,stroke-width:2px,color:#B71C1C;
 
+    % Sınıfların Atanması
     class PreProc,Crop,Embed,Match process;
     class Detect,Liveness,Decision decision;
     class Unlock result;
