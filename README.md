@@ -79,25 +79,25 @@ Sistem, kameradan alınan her kareyi (frame) analiz ederek milisaniyeler içinde
 ```mermaid
 graph TD
     %% Başlangıç
-    Start([Kamera Görüntüsü]) --> PreProc[Ön İşleme: Gri Tonlama & Histogram Eşitleme]
+    Start([Kamera Görüntüsü]) --> PreProc["Ön İşleme: Gri Tonlama & Histogram Eşitleme"]
 
     %% Aşama 1: Tespit
-    PreProc --> Detect{YÜZ TESPİTİ\n(MTCNN)}
+    PreProc --> Detect{"YÜZ TESPİTİ<br>(MTCNN)"}
     Detect -- Yüz Yok --> Start
     Detect -- Yüz Var --> Crop[Yüz Hizalama ve Kırpma]
 
     %% Aşama 2: Güvenlik (Spoofing)
-    Crop --> Liveness{CANLILIK TESTİ\n(TFLite)}
-    Liveness -- SAHTE (Fake) --> Deny[ERİŞİM REDDİ\n(Alarm Durumu)]
+    Crop --> Liveness{"CANLILIK TESTİ<br>(TFLite)"}
+    Liveness -- SAHTE (Fake) --> Deny["ERİŞİM REDDİ<br>(Alarm Durumu)"]
     
     %% Aşama 3: Tanıma (Recognition)
-    Liveness -- GERÇEK (Real) --> Embed[Vektör Çıkarımı\n(InceptionResNetV1)]
-    Embed --> Match[Veritabanı Karşılaştırma\n(Cosine Similarity)]
+    Liveness -- GERÇEK (Real) --> Embed["Vektör Çıkarımı<br>(InceptionResNetV1)"]
+    Embed --> Match["Veritabanı Karşılaştırma<br>(Cosine Similarity)"]
     
     %% Aşama 4: Karar
-    Match --> Decision{Benzerlik > 0.90?}
+    Match --> Decision{"Benzerlik > 0.90?"}
     Decision -- Hayır --> Deny
-    Decision -- Evet --> Unlock[MOSFET Tetikleme\n(KAPI AÇIK)]
+    Decision -- Evet --> Unlock["MOSFET Tetikleme<br>(KAPI AÇIK)"]
     
     %% Döngü
     Deny --> Start
