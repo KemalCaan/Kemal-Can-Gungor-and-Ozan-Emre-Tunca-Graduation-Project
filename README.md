@@ -50,3 +50,51 @@ graph LR
     PSU[12V Güç Kaynağı] -- Güç Beslemesi --> RELAY
     RELAY -- Anahtarlama --> LOCK[Solenoid Kilit]
     CAM[Pi Camera V3] -- CSI Arayüzü --> RPI
+
+flowchart TD
+    A([Başlangıç / Kamera Görüntüsü]) --> B[Ön İşleme: Gri Tonlama & Histogram Eşitleme]
+    B --> C{Yüz Tespiti / MTCNN}
+    C -- Yüz Bulunamadı --> A
+    C -- Yüz Tespit Edildi --> D[Canlılık Testi / Anti-Spoofing]
+    
+    D -- SAHTE (Fotoğraf/Video) --> E[Erişim Reddedildi / Kırmızı LED]
+    D -- GERÇEK (Canlı Kişi) --> F[Öznitelik Çıkarımı / InceptionResNetV1]
+    
+    F --> G[Vektör Karşılaştırma / Cosine Similarity]
+    G --> H{Benzerlik > 0.90?}
+    
+    H -- Hayır --> E
+    H -- Evet --> I[GPIO Tetikleme / MOSFET Sürüşü]
+    I --> J([Kilit Açıldı / Yeşil LED])
+    E --> A
+    J --> A
+
+
+
+Yöntem,Doğruluk (Accuracy),Donanım Yükü,Sonuç
+Bu Çalışma,%96.5,Orta,Yüksek Güvenlik & Kararlılık
+VGG16 + SSD,%92.0,Çok Yüksek,Yavaş Çalışma (<1 FPS)
+Haar Cascade,%88.0,Düşük,Düşük Doğruluk & Hatalı Tespit
+
+
+git clone [https://github.com/KemalCaan/Kemal-Can-Gungor-and-Ozan-Emre-Tunca-Graduation-Project.git](https://github.com/KemalCaan/Kemal-Can-Gungor-and-Ozan-Emre-Tunca-Graduation-Project.git)
+cd Kemal-Can-Gungor-and-Ozan-Emre-Tunca-Graduation-Project
+
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+python raspberry_gui.py
+
+👨‍💻 Geliştirici Bilgileri
+Kemal Can Güngör
+
+Unvan: Elektrik-Elektronik Mühendisi
+
+Uzmanlık: Gömülü Sistemler, IoT, Bilgisayarlı Görü (Computer Vision)
+
+İletişim: LinkedIn Profilim | E-posta Gönder
+
+
+
+
