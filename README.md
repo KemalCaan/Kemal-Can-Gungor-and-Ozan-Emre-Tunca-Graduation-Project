@@ -1,9 +1,3 @@
-Gemini şunu dedi:
-Anlaşıldı. İstediğin her şey (Açıklamalar, Teknik Detaylar, Mermaid Şemaları, Tablolar) tek bir Markdown dosyası olarak aşağıdadır.
-
-Bunu kopyalayıp README.md dosyasının içine yapıştırman yeterlidir.
-
-Markdown
 # Yüz Tanıma ve Canlılık Tespiti Tabanlı Gömülü Akıllı Kilit Sistemi
 # (Smart Door Lock System Using Face Recognition & Liveness Detection)
 
@@ -65,23 +59,24 @@ graph LR
 
     CAM[Pi Camera V3] -- CSI Arayüzü --> RPI
     style MOSFET fill:#f9f,stroke:#333,stroke-width:2px
-2. Yazılım Teknolojileri (Software Stack)
-Dil: Python 3.x
+```
 
-Yüz Tespiti: MTCNN (Multi-task Cascaded Convolutional Networks).
+### 2. Yazılım Teknolojileri (Software Stack)
+* **Dil:** Python 3.x
+* **Yüz Tespiti:** MTCNN (Multi-task Cascaded Convolutional Networks).
+* **Öznitelik Çıkarımı:** InceptionResNetV1 (VGGFace2 Pre-trained).
+* **Canlılık Analizi:** TensorFlow Lite (MobileNetV2).
+* **Arayüz:** Tkinter (Multithreaded GUI).
 
-Öznitelik Çıkarımı: InceptionResNetV1 (VGGFace2 Pre-trained).
+---
 
-Canlılık Analizi: TensorFlow Lite (MobileNetV2).
+## 🔄 Algoritma Akış Şeması (Methodology & Workflow)
 
-Arayüz: Tkinter (Multithreaded GUI).
-
-🔄 Algoritma Akış Şeması (Methodology & Workflow)
 Sistem, kameradan alınan her kareyi (frame) analiz ederek milisaniyeler içinde karar verir.
 
-(Karar Mekanizması Görselleştirmesi)
+**(Karar Mekanizması Görselleştirmesi)**
 
-Kod snippet'i
+```mermaid
 graph TD
     %% Başlangıç
     Start([Kamera Görüntüsü]) --> PreProc[Ön İşleme: Gri Tonlama & Histogram Eşitleme]
@@ -118,45 +113,61 @@ graph TD
     class Detect,Liveness,Decision decision;
     class Unlock result;
     class Deny fail;
-📊 Performans Sonuçları (Performance Results)
+```
+
+---
+
+## 📊 Performans Sonuçları (Performance Results)
+
 Geliştirilen sistem, 1.050 farklı test senaryosu altında, endüstri standardı diğer yöntemlerle karşılaştırılmıştır.
 
-Yöntem	Doğruluk (Accuracy)	Hız (FPS)	Donanım Yükü	Canlılık Testi
-Bu Proje (MTCNN + InceptionResNet)	%96.5	~0.7 FPS	Orta	VAR
-Haar Cascade + LBPH	%82.0	~4.5 FPS	Düşük	YOK
-HOG + SVM	%88.5	~3.0 FPS	Orta	YOK
-CNN (VGG16 Tabanlı)	%92.0	~0.2 FPS	Çok Yüksek	YOK
-💻 Kurulum (Installation)
+| Yöntem | Doğruluk (Accuracy) | Hız (FPS) | Donanım Yükü | Canlılık Testi |
+| :--- | :---: | :---: | :---: | :---: |
+| **Bu Proje (MTCNN + InceptionResNet)** | **%96.5** | **~0.7 FPS** | **Orta** | **VAR** |
+| Haar Cascade + LBPH | %82.0 | ~4.5 FPS | Düşük | YOK |
+| HOG + SVM | %88.5 | ~3.0 FPS | Orta | YOK |
+| CNN (VGG16 Tabanlı) | %92.0 | ~0.2 FPS | Çok Yüksek | YOK |
+
+---
+
+## 💻 Kurulum (Installation)
+
 Projeyi Raspberry Pi ortamında çalıştırmak için aşağıdaki adımları izleyin.
 
-Depoyu Klonlayın:
+1.  **Depoyu Klonlayın:**
+    ```bash
+    git clone [https://github.com/KemalCaan/Kemal-Can-Gungor-and-Ozan-Emre-Tunca-Graduation-Project.git](https://github.com/KemalCaan/Kemal-Can-Gungor-and-Ozan-Emre-Tunca-Graduation-Project.git)
+    cd Kemal-Can-Gungor-and-Ozan-Emre-Tunca-Graduation-Project
+    ```
 
-Bash
-git clone [https://github.com/KemalCaan/Kemal-Can-Gungor-and-Ozan-Emre-Tunca-Graduation-Project.git](https://github.com/KemalCaan/Kemal-Can-Gungor-and-Ozan-Emre-Tunca-Graduation-Project.git)
-cd Kemal-Can-Gungor-and-Ozan-Emre-Tunca-Graduation-Project
-Sanal Ortam Oluşturun:
+2.  **Sanal Ortam Oluşturun:**
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate
+    ```
 
-Bash
-python3 -m venv venv
-source venv/bin/activate
-Bağımlılıkları Yükleyin:
+3.  **Bağımlılıkları Yükleyin:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+    *(Not: PyTorch ve TensorFlow Lite'ın ARM mimarisi (Raspberry Pi) için uygun sürümlerinin kurulduğundan emin olun.)*
 
-Bash
-pip install -r requirements.txt
-(Not: PyTorch ve TensorFlow Lite'ın ARM mimarisi (Raspberry Pi) için uygun sürümlerinin kurulduğundan emin olun.)
+4.  **Uygulamayı Başlatın:**
+    ```bash
+    python raspberry_gui.py
+    ```
 
-Uygulamayı Başlatın:
+---
 
-Bash
-python raspberry_gui.py
-👨‍💻 Geliştirici (Developer)
-Kemal Can Güngör
+## 👨‍💻 Geliştirici (Developer)
 
-Unvan: Elektrik-Elektronik Mühendisi
+**Kemal Can Güngör**
+* **Unvan:** Elektrik-Elektronik Mühendisi
+* **Odak Alanları:** Gömülü Sistemler, IoT, Bilgisayarlı Görü, Kenar Yapay Zeka (Edge AI)
+* **İletişim:** [LinkedIn Profilim](https://www.linkedin.com/in/kemal-can-g%C3%BCng%C3%B6r-4598b4234/) | [E-posta](mailto:kemalcangungor@hotmail.com)
 
-Odak Alanları: Gömülü Sistemler, IoT, Bilgisayarlı Görü, Kenar Yapay Zeka (Edge AI)
+---
 
-İletişim: LinkedIn Profilim | E-posta
+## 📄 Lisans (License)
 
-📄 Lisans (License)
-Bu proje akademik araştırma ve geliştirme amaçlı olup MIT Lisansı altında açık kaynak olarak sunulmuştur.
+Bu proje akademik araştırma ve geliştirme amaçlı olup **MIT Lisansı** altında açık kaynak olarak sunulmuştur.
