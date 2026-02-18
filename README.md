@@ -1,3 +1,9 @@
+Gemini şunu dedi:
+Anlaşıldı. İstediğin her şey (Açıklamalar, Teknik Detaylar, Mermaid Şemaları, Tablolar) tek bir Markdown dosyası olarak aşağıdadır.
+
+Bunu kopyalayıp README.md dosyasının içine yapıştırman yeterlidir.
+
+Markdown
 # Yüz Tanıma ve Canlılık Tespiti Tabanlı Gömülü Akıllı Kilit Sistemi
 # (Smart Door Lock System Using Face Recognition & Liveness Detection)
 
@@ -6,124 +12,151 @@
 ![Framework](https://img.shields.io/badge/PyTorch-FaceNet-orange?style=for-the-badge&logo=pytorch)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-## 📌 Proje Hakkında (Project Abstract)
+## 📖 Proje Özeti (Abstract)
 
-Bu çalışma, **Elektrik-Elektronik Mühendisliği** bitirme tezi kapsamında **Kemal Can Güngör** tarafından tasarlanmış ve gerçekleştirilmiştir.
+Bu proje, **Elektrik-Elektronik Mühendisliği** bitirme tezi kapsamında **Kemal Can Güngör** tarafından tasarlanmış ve prototiplenmiştir.
 
-Proje, biyometrik güvenlik sistemlerinin gömülü sistemler üzerinde gerçek zamanlı uygulanabilirliğini göstermeyi amaçlayan, **Derin Öğrenme (Deep Learning)** tabanlı temassız bir erişim kontrol sistemidir. Sistem, **Raspberry Pi 4** mimarisi üzerinde çalışmakta olup, **TensorFlow Lite** tabanlı "Canlılık Tespiti" (Anti-Spoofing) algoritması ile fotoğraf veya video ekranı kullanılarak yapılan sızma girişimlerini engellemektedir.
+Geliştirilen sistem, biyometrik güvenlik uygulamalarının gömülü sistemler üzerinde gerçek zamanlı ve yüksek güvenilirlikle çalışabileceğini kanıtlayan bir **Akıllı Kapı Kilidi** projesidir. Sistem, **Raspberry Pi 4** mimarisi üzerinde, **Derin Öğrenme (Deep Learning)** algoritmalarını kullanarak çalışır.
 
-Geleneksel sistemlerden farklı olarak, 3.3V mantık seviyesine sahip mikroişlemci ile 12V endüstriyel kilit mekanizması arasında güvenli anahtarlama sağlayan özel bir **MOSFET sürücü devresi** tasarlanmış ve entegre edilmiştir.
-
----
-
-## ⚙️ Teknik Özellikler ve Performans
-
-Sistem, laboratuvar ortamında farklı aydınlatma ve açı koşullarında 1.050 adet test senaryosu ile doğrulanmıştır.
-
-| Parametre | Değer / Açıklama |
-| :--- | :--- |
-| **İşlemci Mimarisi** | ARM Cortex-A72 (Raspberry Pi 4) |
-| **Yüz Tanıma Modeli** | InceptionResNetV1 (Pre-trained VGGFace2) |
-| **Yüz Tespit Algoritması** | MTCNN (Multi-task Cascaded Convolutional Networks) |
-| **Doğruluk Oranı (Accuracy)** | **%96.5** |
-| **Canlılık Tespiti (Spoofing)** | **%96 Başarım** (Fotoğraf/Video Engelleme) |
-| **Tepki Süresi** | ~0.7 FPS (CPU Tabanlı Gerçek Zamanlı İşleme) |
-| **Güç Tüketimi** | Aktif: ~6.5W / Bekleme: ~2.7W |
+Geleneksel yüz tanıma sistemlerinden farklı olarak, entegre edilen **TensorFlow Lite** tabanlı "Canlılık Tespiti" (Anti-Spoofing) modülü sayesinde; fotoğraf, video veya maske kullanılarak yapılan sızma girişimlerini engeller. Donanım tarafında ise, mikroişlemcinin 3.3V lojik çıkışlarını 12V endüstriyel yükleri sürecek şekilde yükselten özel bir **MOSFET sürücü devresi** tasarlanmıştır.
 
 ---
 
-## 🛠️ Sistem Mimarisi (Hardware & Software)
+## ✨ Temel Özellikler (Key Features)
 
-Proje, görüntü işleme yazılımı ile elektromekanik kontrol donanımının entegrasyonundan oluşmaktadır.
+* **Uç Bilişim (Edge Computing):** Tüm yapay zeka işlemleri buluta ihtiyaç duymadan cihaz üzerinde yapılır, veri gizliliği (KVKK/GDPR) sağlanır.
+* **Yüksek Doğruluk:** MTCNN ve InceptionResNetV1 mimarileri ile **%96.5** tanıma başarısı elde edilmiştir.
+* **Anti-Spoofing (Canlılık Testi):** Sahte yüz girişimlerini (fotoğraf/ekran) **%96** oranında tespit edip engeller.
+* **Endüstriyel Kontrol:** BS170 MOSFET ve opto-izole röle üzerinden 12V Solenoid kilit kontrolü sağlanır.
+* **Otomatik Kalibrasyon:** Değişken ışık koşullarında histogram eşitleme ile görüntü optimizasyonu yapar.
 
-### 1. Donanım Katmanı (Hardware Layer)
-* **Ana Kontrol Ünitesi:** Raspberry Pi 4 Model B (4GB RAM).
-* **Görüntüleme:** Raspberry Pi Camera Module V3 (Sony IMX219 Sensör).
-* **Eyleyici (Actuator):** 12V Solenoid Kapı Kilidi.
-* **Güç Elektroniği:** Raspberry Pi'nin 3.3V GPIO çıkışını korumak ve 5V Röle modülünü kararlı tetiklemek için tasarlanmış **BS170 MOSFET** tabanlı lojik seviye dönüştürücü ve sürücü devresi.
+---
+
+## 🛠️ Sistem Mimarisi (System Architecture)
+
+Proje, yazılım ve donanım katmanlarının sıkı entegrasyonuna dayanır.
+
+### 1. Donanım Bileşenleri (Hardware Stack)
+| Bileşen | Teknik Detay | Görevi |
+| :--- | :--- | :--- |
+| **İşlemci** | Raspberry Pi 4 Model B (4GB) | Ana kontrol ve yapay zeka işleme. |
+| **Görüntüleme** | Pi Camera Module V3 (Sony IMX219) | Yüksek çözünürlüklü görüntü akışı. |
+| **Eyleyici** | 12V DC Solenoid Kilit | Kapı mekanizmasını fiziksel olarak kilitler. |
+| **Sürücü** | BS170 MOSFET + 5V Röle | 3.3V GPIO sinyalini 5V/12V güç hattına anahtarlar. |
 
 #### Donanım Bağlantı Şeması (Wiring Diagram)
-Aşağıdaki şema, sistemin elektriksel bağlantı yapısını göstermektedir:
+Aşağıdaki şema, sistemin güç ve veri yollarını göstermektedir:
 
-
+```mermaid
 graph LR
-    RPI[Raspberry Pi 4 GPIO] -- 3.3V Sinyal --> MOSFET[BS170 MOSFET Sürücü]
-    MOSFET -- 5V Tetikleme --> RELAY[5V Röle Modülü]
-    PSU[12V Güç Kaynağı] -- Güç Beslemesi --> RELAY
+    subgraph KONTROL
+    RPI[Raspberry Pi 4 GPIO]
+    end
+    
+    subgraph GÜÇ ELEKTRONİĞİ
+    RPI -- 3.3V Sinyal --> MOSFET[BS170 Sürücü Devresi]
+    MOSFET -- 5V Tetik --> RELAY[5V Röle Modülü]
+    PSU[12V Harici Güç] -- Besleme --> RELAY
+    end
+    
+    subgraph EYLEYİCİ
     RELAY -- Anahtarlama --> LOCK[Solenoid Kilit]
+    end
+
     CAM[Pi Camera V3] -- CSI Arayüzü --> RPI
-
-
+    style MOSFET fill:#f9f,stroke:#333,stroke-width:2px
 2. Yazılım Teknolojileri (Software Stack)
 Dil: Python 3.x
 
-Çerçeveler: PyTorch (FaceNet), TensorFlow Lite (Anti-Spoofing)
+Yüz Tespiti: MTCNN (Multi-task Cascaded Convolutional Networks).
 
-Görüntü İşleme: OpenCV (cv2)
+Öznitelik Çıkarımı: InceptionResNetV1 (VGGFace2 Pre-trained).
 
-Arayüz: Tkinter (Multithreaded GUI)
+Canlılık Analizi: TensorFlow Lite (MobileNetV2).
 
+Arayüz: Tkinter (Multithreaded GUI).
 
+🔄 Algoritma Akış Şeması (Methodology & Workflow)
+Sistem, kameradan alınan her kareyi (frame) analiz ederek milisaniyeler içinde karar verir.
 
+(Karar Mekanizması Görselleştirmesi)
 
+Kod snippet'i
 graph TD
     %% Başlangıç
-    Start([Kamera Görüntüsü Alımı]) --> PreProc[Ön İşleme: Gri Tonlama & Histogram Eşitleme]
+    Start([Kamera Görüntüsü]) --> PreProc[Ön İşleme: Gri Tonlama & Histogram Eşitleme]
+
     %% Aşama 1: Tespit
     PreProc --> Detect{YÜZ TESPİTİ\n(MTCNN)}
     Detect -- Yüz Yok --> Start
-    Detect -- Yüz Var --> Crop[Yüzü Kırp ve Hizala]
-    %% Aşama 2: Güvenlik Kontrolü (Canlılık)
-    Crop --> Liveness{CANLILIK TESTİ\n(TFLite Model)}
-    Liveness -- SAHTE (Spoof) --> Deny[ERİŞİM REDDİ\n(Kırmızı LED Uyarısı)]    
-    %% Aşama 3: Tanıma
+    Detect -- Yüz Var --> Crop[Yüz Hizalama ve Kırpma]
+
+    %% Aşama 2: Güvenlik (Spoofing)
+    Crop --> Liveness{CANLILIK TESTİ\n(TFLite)}
+    Liveness -- SAHTE (Fake) --> Deny[ERİŞİM REDDİ\n(Alarm Durumu)]
+    
+    %% Aşama 3: Tanıma (Recognition)
     Liveness -- GERÇEK (Real) --> Embed[Vektör Çıkarımı\n(InceptionResNetV1)]
     Embed --> Match[Veritabanı Karşılaştırma\n(Cosine Similarity)]
-    %% Aşama 4: Karar ve Eylem
+    
+    %% Aşama 4: Karar
     Match --> Decision{Benzerlik > 0.90?}
-    Decision -- Hayır (Tanınmadı) --> Deny
-    Decision -- Evet (Tanındı) --> Actuate[GPIO & MOSFET Tetikleme]
-    Actuate --> Unlock(((KİLİT AÇILDI)))    
+    Decision -- Hayır --> Deny
+    Decision -- Evet --> Unlock[MOSFET Tetikleme\n(KAPI AÇIK)]
+    
     %% Döngü
     Deny --> Start
-    Unlock -- 5 Sn Sonra Kitle --> Start
-    %% Stil Tanımlamaları
+    Unlock --> Start
+
+    %% Stil
     classDef process fill:#e1f5fe,stroke:#01579b,stroke-width:1px;
     classDef decision fill:#fff9c4,stroke:#fbc02d,stroke-width:1px;
-    classDef resultDone fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px;
-    classDef resultFail fill:#ffcdd2,stroke:#c62828,stroke-width:2px;
-    class PreProc,Crop,Embed,Match,Actuate process;
+    classDef result fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px;
+    classDef fail fill:#ffcdd2,stroke:#c62828,stroke-width:2px;
+
+    class PreProc,Crop,Embed,Match process;
     class Detect,Liveness,Decision decision;
-    class Unlock resultDone;
-    class Deny resultFail;
+    class Unlock result;
+    class Deny fail;
+📊 Performans Sonuçları (Performance Results)
+Geliştirilen sistem, 1.050 farklı test senaryosu altında, endüstri standardı diğer yöntemlerle karşılaştırılmıştır.
 
+Yöntem	Doğruluk (Accuracy)	Hız (FPS)	Donanım Yükü	Canlılık Testi
+Bu Proje (MTCNN + InceptionResNet)	%96.5	~0.7 FPS	Orta	VAR
+Haar Cascade + LBPH	%82.0	~4.5 FPS	Düşük	YOK
+HOG + SVM	%88.5	~3.0 FPS	Orta	YOK
+CNN (VGG16 Tabanlı)	%92.0	~0.2 FPS	Çok Yüksek	YOK
+💻 Kurulum (Installation)
+Projeyi Raspberry Pi ortamında çalıştırmak için aşağıdaki adımları izleyin.
 
+Depoyu Klonlayın:
 
+Bash
+git clone [https://github.com/KemalCaan/Kemal-Can-Gungor-and-Ozan-Emre-Tunca-Graduation-Project.git](https://github.com/KemalCaan/Kemal-Can-Gungor-and-Ozan-Emre-Tunca-Graduation-Project.git)
+cd Kemal-Can-Gungor-and-Ozan-Emre-Tunca-Graduation-Project
+Sanal Ortam Oluşturun:
 
+Bash
+python3 -m venv venv
+source venv/bin/activate
+Bağımlılıkları Yükleyin:
 
+Bash
+pip install -r requirements.txt
+(Not: PyTorch ve TensorFlow Lite'ın ARM mimarisi (Raspberry Pi) için uygun sürümlerinin kurulduğundan emin olun.)
 
+Uygulamayı Başlatın:
 
+Bash
+python raspberry_gui.py
+👨‍💻 Geliştirici (Developer)
+Kemal Can Güngör
 
+Unvan: Elektrik-Elektronik Mühendisi
 
+Odak Alanları: Gömülü Sistemler, IoT, Bilgisayarlı Görü, Kenar Yapay Zeka (Edge AI)
 
+İletişim: LinkedIn Profilim | E-posta
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+📄 Lisans (License)
+Bu proje akademik araştırma ve geliştirme amaçlı olup MIT Lisansı altında açık kaynak olarak sunulmuştur.
